@@ -1,0 +1,32 @@
+{
+  "name": "nextjs-generators",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/nextjs-generators/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/nextjs-generators/dist",
+        "main": "packages/nextjs-generators/src/index.ts",
+        "tsConfig": "packages/nextjs-generators/tsconfig.lib.json",
+        "rootDir": "packages/nextjs-generators/src",
+        "generatePackageJson": false,
+        "assets": [
+          {
+            "input": "./packages/nextjs-generators/src",
+            "glob": "**/!(*.ts)",
+            "output": "."
+          },
+          {
+            "input": "./packages/nextjs-generators/src",
+            "glob": "**/*.d.ts",
+            "output": "."
+          }
+        ]
+      }
+    }
+  }
+}

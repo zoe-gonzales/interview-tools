@@ -1,7 +1,11 @@
 {
-    "extends": "./tsconfig.base.json",
-    "compileOnSave": false,
-    "files": [],
-    "references": [],
-    "compilerOptions": {}
+  "extends": "./tsconfig.base.json",
+  "compileOnSave": false,
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/nextjs-generators"
+    }
+  ],
+  "compilerOptions": {}
 }

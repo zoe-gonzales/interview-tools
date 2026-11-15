@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/schema",
+  "$id": "Frontend",
+  "title": "Next.js Frontend Generator",
+  "description": "Scaffold a frontend-only Next.js app with React in an Nx workspace using pnpm",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Application name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What is the name of your frontend application?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Directory where the application will be created (defaults to apps/<name>)"
+    },
+    "style": {
+      "type": "string",
+      "description": "Stylesheet format",
+      "default": "css",
+      "enum": ["css", "scss", "none"]
+    },
+    "appDir": {
+      "type": "boolean",
+      "description": "Enable Next.js App Router (set to false for Pages Router)",
+      "default": true
+    }
+  },
+  "required": ["name"]
+}
