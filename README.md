@@ -1,6 +1,6 @@
 # interview-tools
 
-A collection of Nx generators that scaffold a ready-to-run application stack for **software developer interviews**. Instead of spending interview time wiring up boilerplate, candidates get a fully configured project — frontend or fullstack — and can focus on the problem at hand.
+Easy-to-use Nx generators to scaffold a simple, working application stack for **software developer interviews**. Works for frontend-only and full stack apps. Spend your pre-interview time brushing up on your skills instead of fighting with broken boilerplate.
 
 ## What's in this repo
 
