@@ -13,6 +13,13 @@ Easy-to-use Nx generators to scaffold a simple, working application stack for **
 - **Frontend** — Next.js + React, Vitest unit tests, dev server on `:4200`
 - **Fullstack** — Next.js frontend + Express REST API + SQLite via Prisma ORM, with `/api/*` proxy routing between them
 
+### Packaging & Registry Architecture
+
+`@interview-tools/nextjs-generators` is currently configured to use a local [Verdaccio](https://verdaccio.org/) registry (`http://localhost:4873/`) as an initial development and isolation step. This allows verifying package boundaries and consumption workflows in an isolated sandbox.
+
+> [!NOTE]
+> Using a local Verdaccio registry is an initial architecture step; the package will ultimately be published to public npm under a public scope. See [PUBLISHING.md](./PUBLISHING.md) for registry setup and publishing instructions.
+
 ---
 
 ## Prerequisites

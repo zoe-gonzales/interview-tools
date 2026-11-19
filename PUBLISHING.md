@@ -2,6 +2,12 @@
 
 This guide covers how to version, publish, and validate new releases of the generators using `nx release` and a local [Verdaccio](https://verdaccio.org/) registry.
 
+> [!NOTE]
+> **Registry Architecture & Distribution Roadmap**:
+> `@interview-tools/nextjs-generators` is currently configured to use a local [Verdaccio](https://verdaccio.org/) registry (`http://localhost:4873/`) as an initial development and isolation step. This enables robust verification of package boundaries, consumer installs, and release lifecycles in an isolated environment.
+>
+> While Verdaccio serves as the initial architecture step, the package will ultimately be published to public npm under a public scope.
+
 ---
 
 ## Prerequisites
