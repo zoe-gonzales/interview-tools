@@ -3,14 +3,12 @@
   "version": "0.0.1",
   "type": "commonjs",
   "main": "./dist/index.js",
-  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "@interview-tools/source": "./src/index.ts",
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
       "default": "./dist/index.js"
     }
   },
@@ -19,6 +17,9 @@
     "!**/*.tsbuildinfo",
     "generators.json"
   ],
+  "publishConfig": {
+    "registry": "http://localhost:4873/"
+  },
   "dependencies": {
     "@nx/devkit": "24.0.0",
     "@nx/express": "24.0.0",
