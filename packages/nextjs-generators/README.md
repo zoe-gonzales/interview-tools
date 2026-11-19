@@ -1,121 +1,202 @@
 # @interview-tools/nextjs-generators
 
-A publishable Nx plugin containing generators for scaffolding Next.js applications in an Nx workspace using **pnpm**.
+An Nx plugin that scaffolds a **Next.js application stack for software developer interviews**. Pick the generator that matches your interview brief and get a fully configured project in seconds.
 
-## Features
-
-- 🌐 **`frontend` Generator**: Scaffolds a frontend-only Next.js application with React, vitest unit tests, and pre-configured dev server.
-- 🚀 **`fullstack` Generator**: Scaffolds a fullstack Next.js application with an Express API backend, SQLite database managed via Prisma ORM, and integrated proxy routing.
-- 📦 **pnpm First**: Built and optimized for pnpm workspaces.
-- 🧩 **Nx Standard Generators**: Composes official `@nx/next` and `@nx/express` generators with custom templates, targets, and database tooling.
+| Generator | What it creates |
+|---|---|
+| `frontend` | Next.js + React app with Vitest unit tests |
+| `fullstack` | Next.js frontend + Express REST API + SQLite via Prisma ORM |
 
 ---
 
-## Installation & Setup
+## Prerequisites
 
-Install the plugin in any Nx workspace:
+Assumes you have just cloned this repo **and** have a separate Nx workspace to consume the generators in. If you don't have a consumer workspace yet, [create one with `create-nx-workspace`](https://nx.dev/packages/nx/documents/create-nx-workspace).
+
+Minimum required versions:
+
+| Technology | Minimum version | Notes |
+|---|---|---|
+| Node.js | **22.x** | `.nvmrc` pins `v22.21.0`; run `nvm use` |
+| pnpm | **9.x** | Workspace uses `pnpm@9.15.9` |
+| Nx | **24.x** | Required in both this repo and the consumer workspace |
+
+---
+
+## Installation — consume from local registry
+
+> [!IMPORTANT]
+> These generators are published to a **local Verdaccio registry** at `http://localhost:4873`. The registry must be running before you install or use the generators. See [PUBLISHING.md](../../PUBLISHING.md) to start it and publish the latest version.
+
+In your **consumer Nx workspace**, point pnpm at the local registry for this scope:
 
 ```bash
+# Option A: add to .npmrc in your consumer workspace root
+echo "@interview-tools:registry=http://localhost:4873/" >> .npmrc
+
+# Then install
 pnpm add -D -w @interview-tools/nextjs-generators
 ```
 
-Or add via Nx:
-
 ```bash
-pnpm nx add @interview-tools/nextjs-generators
+# Option B: install with --registry flag directly
+pnpm add -D -w @interview-tools/nextjs-generators --registry http://localhost:4873
 ```
 
 ---
 
-## 1. Frontend Generator (`frontend`)
+## 1. Frontend generator
 
-Scaffold a frontend-only Next.js React application:
+Scaffolds a **frontend-only** Next.js React application.
+
+### Run the generator
 
 ```bash
-pnpm nx g @interview-tools/nextjs-generators:frontend my-site
+# Minimal — name is the only required argument
+pnpm nx g @interview-tools/nextjs-generators:frontend my-app
+
+# Custom directory
+pnpm nx g @interview-tools/nextjs-generators:frontend my-app --directory=apps/interview/my-app
+
+# Use SCSS instead of CSS
+pnpm nx g @interview-tools/nextjs-generators:frontend my-app --style=scss
+
+# Pages Router instead of App Router
+pnpm nx g @interview-tools/nextjs-generators:frontend my-app --appDir=false
+
+# No stylesheet (bring your own)
+pnpm nx g @interview-tools/nextjs-generators:frontend my-app --style=none
+
+# Dry run — preview changes without writing files
+pnpm nx g @interview-tools/nextjs-generators:frontend my-app --dry-run
 ```
 
 ### Options
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `--name` | `string` | *(Required)* | Application name |
-| `--directory` | `string` | `apps/<name>` | Directory where the application will be created |
+| `name` | `string` | *(required)* | Application name; becomes the Nx project name |
+| `--directory` | `string` | `apps/<name>` | Directory where the app will be created |
 | `--style` | `css` \| `scss` \| `none` | `css` | Stylesheet format |
-| `--appDir` | `boolean` | `true` | Enable Next.js App Router (set to `false` for Pages Router) |
+| `--appDir` | `boolean` | `true` | `true` = Next.js App Router, `false` = Pages Router |
 
-### Start the Frontend Dev Server
+### Validate the frontend app works
+
+**1. Start the dev server:**
 
 ```bash
-pnpm nx dev my-site
+pnpm nx dev my-app
 ```
-Opens locally at [http://localhost:4200](http://localhost:4200).
+
+**2. Open the app:**
+
+Navigate to [http://localhost:4200](http://localhost:4200). You should see the Next.js default page.
+
+**3. Run unit tests:**
+
+```bash
+pnpm nx test my-app
+```
+
+All tests should pass with no errors.
 
 ---
 
-## 2. Fullstack Generator (`fullstack`)
+## 2. Fullstack generator
 
-Scaffold a complete fullstack application consisting of:
-- **Next.js + React Frontend** (`apps/<name>`) running on `:4200`
-- **Express REST API Server** (`apps/<name>-api`) running on `:3000`
-- **SQLite Database with Prisma ORM** (`apps/<name>-api/prisma/dev.db`)
-- **API Proxy Routing** (`/api/*` in Next.js automatically rewrites to `:3000`)
+Scaffolds a **complete fullstack application** consisting of:
+
+- **Next.js + React frontend** (`apps/<name>`) — dev server on `:4200`
+- **Express REST API** (`apps/<name>-api`) — server on `:3000`
+- **SQLite database** via Prisma ORM (`apps/<name>-api/prisma/dev.db`)
+- **API proxy** — requests to `/api/*` in the frontend automatically rewrite to `:3000`
+
+### Run the generator
 
 ```bash
-pnpm nx g @interview-tools/nextjs-generators:fullstack my-fullstack
+# Minimal — creates <name> (frontend) and <name>-api (Express)
+pnpm nx g @interview-tools/nextjs-generators:fullstack my-app
+
+# Custom frontend directory (API always goes in apps/<name>-api)
+pnpm nx g @interview-tools/nextjs-generators:fullstack my-app --directory=apps/interview/my-app
+
+# SCSS styling
+pnpm nx g @interview-tools/nextjs-generators:fullstack my-app --style=scss
+
+# Pages Router
+pnpm nx g @interview-tools/nextjs-generators:fullstack my-app --appDir=false
+
+# No stylesheet
+pnpm nx g @interview-tools/nextjs-generators:fullstack my-app --style=none
+
+# Dry run
+pnpm nx g @interview-tools/nextjs-generators:fullstack my-app --dry-run
 ```
 
 ### Options
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `--name` | `string` | *(Required)* | Application base name (frontend: `<name>`, API: `<name>-api`) |
-| `--directory` | `string` | `apps/<name>` | Directory where frontend will be created |
-| `--style` | `css` \| `scss` \| `none` | `css` | Stylesheet format for frontend |
-| `--appDir` | `boolean` | `true` | Enable Next.js App Router (set to `false` for Pages Router) |
+| `name` | `string` | *(required)* | Base name; frontend is `<name>`, API is `<name>-api` |
+| `--directory` | `string` | `apps/<name>` | Directory for the **frontend** project |
+| `--style` | `css` \| `scss` \| `none` | `css` | Stylesheet format for the frontend |
+| `--appDir` | `boolean` | `true` | `true` = App Router, `false` = Pages Router |
 
-### Fullstack Commands
+### Validate the fullstack app works
 
-#### 1. Database Operations (SQLite + Prisma)
+**1. Set up the database:**
+
 ```bash
-# Push schema to SQLite database (creates dev.db)
-pnpm nx db-push my-fullstack-api
+# Push the Prisma schema to SQLite and create dev.db
+pnpm nx db-push my-app-api
 
-# Seed the database with sample data
-pnpm nx db-seed my-fullstack-api
-
-# Open Prisma Studio GUI in browser
-pnpm nx db-studio my-fullstack-api
-
-# Create and run database migrations
-pnpm nx db-migrate my-fullstack-api
+# (Optional) seed with sample data
+pnpm nx db-seed my-app-api
 ```
 
-#### 2. Start Express Web Server (:3000)
+**2. Start the Express API** (keep this terminal running):
+
 ```bash
-pnpm nx serve my-fullstack-api
+pnpm nx serve my-app-api
 ```
-- Health Check: `http://localhost:3000/api/health`
-- Items CRUD: `http://localhost:3000/api/items`
 
-#### 3. Start Next.js Frontend Dev Server (:4200)
+Verify the API is healthy:
+
 ```bash
-pnpm nx dev my-fullstack
+curl http://localhost:3000/api/health
+# → { "status": "ok" }
+
+curl http://localhost:3000/api/items
+# → [] (or seeded data)
 ```
-- Interactive Dashboard: `http://localhost:4200`
-- API calls to `/api/*` are automatically proxied to the Express backend.
 
----
-
-## Publishing to npm
-
-To build and publish this plugin:
+**3. Start the Next.js frontend** (open a second terminal):
 
 ```bash
-# 1. Build the plugin
-pnpm nx build nextjs-generators
+pnpm nx dev my-app
+```
 
-# 2. Publish to npm registry
-cd packages/nextjs-generators/dist
-npm publish --access public
+Navigate to [http://localhost:4200](http://localhost:4200). The dashboard should load and display data from the API (proxied through `/api/*`).
+
+**4. Run unit tests:**
+
+```bash
+# Test just the frontend
+pnpm nx test my-app
+
+# Test just the API
+pnpm nx test my-app-api
+
+# Test both at once
+pnpm nx run-many -t test -p my-app my-app-api
+```
+
+### Additional database commands
+
+```bash
+# Open Prisma Studio (browser GUI for the database)
+pnpm nx db-studio my-app-api
+
+# Create and apply a migration
+pnpm nx db-migrate my-app-api
 ```
