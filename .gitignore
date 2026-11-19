@@ -27,12 +27,21 @@ node_modules
 # misc
 /.sass-cache
 /connect.lock
-/coverage
+coverage
+*.lcov
+.nyc_output
+test-results/
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
+pnpm-debug.log*
+*.log
 testem.log
 /typings
+*.tsbuildinfo
+
+# Local Verdaccio storage
+.verdaccio/storage
 
 # System Files
 .DS_Store
